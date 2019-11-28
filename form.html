@@ -27,24 +27,22 @@
   <label>Cerca:</label><input type="text"     id="cerca_principal" oninput="udpateEnabled();"><br/>
         <label></label><input type="checkbox" id="reg_exp" /> expressió regular (<a href="">exemples</a>)<br/><br/>
 
-  <label>Comença amb:</label>          <input type="text" id="comenca_amb" oninput="udpateEnabled();"><br/>
-  <label>Acaba amb:</label>            <input type="text" id="acaba_amb" oninput="udpateEnabled();"><br/>
-  <label>Conté la cadena:</label>      <input type="text" id="conte_cadena" oninput="udpateEnabled();"><br/>
-  <label>No conté la cadena:</label>   <input type="text" id="no_conte_cadena" oninput="udpateEnabled();"><br/>
-  <label>Conté les lletres:</label>    <input type="text" id="conte_lletres" oninput="udpateEnabled();"><br/>
-  <label>No conté les lletres:</label> <input type="text" id="no_conte_lletres" oninput="udpateEnabled();"><br/><br/>
+  <label>Comença amb:</label>          <input type="text" id="comenca_amb" oninput="udpateEnabled();" size="4">
+  <label>Acaba amb:</label>            <input type="text" id="acaba_amb" oninput="udpateEnabled();" size="4"><br/>
+  <label>Conté la cadena:</label>      <input type="text" id="conte_cadena" oninput="udpateEnabled();" size="4">
+  <label>No conté la cadena:</label>   <input type="text" id="no_conte_cadena" oninput="udpateEnabled();" size="4"><br/>
+  <label>Conté les lletres:</label>    <input type="text" id="conte_lletres" oninput="udpateEnabled();" size="4">
+  <label>No conté les lletres:</label> <input type="text" id="no_conte_lletres" oninput="udpateEnabled();" size="4"><br/><br/>
 
 
-  <label>Rima amb:</label>             <input type="text" id="rima_amb" oninput="udpateEnabled();"><br/><br/>
+  <label>Rima amb:</label>             <input type="text" id="rima_amb" oninput="udpateEnabled();" size="4">
 
-  <label>Anagrama de:</label>          <input type="text" id="anagrama_de" oninput="updateAnagrama()"><br/><br/>
+  <label>Anagrama de:</label>          <input type="text" id="anagrama_de" oninput="updateAnagrama()" size="4"><br/><br/>
   
   <label>Mots encreuats de:</label>    <select id="nre_motsencreuats" oninput="createMotsEncreuats()"></select>
                                        <span id="mot_encreuat"></span><br/><br/>
 
-
-<h5>Condicions generals</h5>
-  
+  <br/>
   <label>Nombre de lletres:</label>    entre <select id="min_char"></select> i <select id="max_char"></select><br/>
   <label>Nombre de síl·labes:</label>  entre <select id="min_sil"></select> i <select id="max_sil"></select><br/>
   
