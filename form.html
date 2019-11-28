@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="UTF-8">
+	<style>
+    .smallbox {
+      width: 1em; text-align: center; 
+    }
+		label {
+		  display: inline-block;
+		  width: 200px;
+		  text-align: right;
+		}​
+    
+    
+	</style>
+</head>
+<body>
+
+<h2>Cercador avançat de paraules</h2>
+
+<form action="" id="formparaules">
+
+<input type="submit" value="Cerca">
+<input type="button" value="Neteja" onclick="cleanAll();">
+  <br/><br/>
+  <label>Cerca:</label><input type="text"     id="cerca_principal" oninput="udpateEnabled();"><br/>
+        <label></label><input type="checkbox" id="reg_exp" /> expressió regular (<a href="">exemples</a>)<br/><br/>
+
+  <label>Comença amb:</label>          <input type="text" id="comenca_amb" oninput="udpateEnabled();"><br/>
+  <label>Acaba amb:</label>            <input type="text" id="acaba_amb" oninput="udpateEnabled();"><br/>
+  <label>Conté la cadena:</label>      <input type="text" id="conte_cadena" oninput="udpateEnabled();"><br/>
+  <label>No conté la cadena:</label>   <input type="text" id="no_conte_cadena" oninput="udpateEnabled();"><br/>
+  <label>Conté les lletres:</label>    <input type="text" id="conte_lletres" oninput="udpateEnabled();"><br/>
+  <label>No conté les lletres:</label> <input type="text" id="no_conte_lletres" oninput="udpateEnabled();"><br/><br/>
+
+
+  <label>Rima amb:</label>             <input type="text" id="rima_amb" oninput="udpateEnabled();"><br/><br/>
+
+  <label>Anagrama de:</label>          <input type="text" id="anagrama_de" oninput="updateAnagrama()"><br/><br/>
+  
+  <label>Mots encreuats de:</label>    <select id="nre_motsencreuats" oninput="createMotsEncreuats()"></select>
+                                       <span id="mot_encreuat"></span><br/><br/>
+
+
+<h5>Condicions generals</h5>
+  
+  <label>Nombre de lletres:</label>    entre <select id="min_char"></select> i <select id="max_char"></select><br/>
+  <label>Nombre de síl·labes:</label>  entre <select id="min_sil"></select> i <select id="max_sil"></select><br/>
+  
+
+
+  <label>Diferencia maj./min.:</label>    <input type="checkbox" id="maj_min" value="majmin" checked/> <br/>
+  <label>Té en compte diacrítics:</label> <input type="checkbox" id="diacritics" value="diacritics" checked/><br/> 
+  <label>Cerca en:</label> 
+    <select id="cerca_en">
+      <option value="totes les formes" selected>totes les formes</option>
+      <option value="només lemes">només lemes</option><br/> 
+    </select><br/>
+
+<label>Categories gramaticals:</label> 
+    
+    <input type="checkbox" id="noms_comuns"   checked/> noms comuns
+    <input type="checkbox" id="noms_propis"   checked/> noms propis
+    <input type="checkbox" id="adjectius"     checked/> adjectius 
+    <input type="checkbox" id="verbs"         checked/> verbs 
+    <input type="checkbox" id="adverbis"      checked/> adverbis <br/>
+    <label></label>
+    <input type="checkbox" id="pronoms"       checked/> pronoms
+    <input type="checkbox" id="preposicions"  checked/> preposicions 
+    <input type="checkbox" id="conjuncions"   checked/> conjuncions
+    <input type="checkbox" id="articles"      checked/> articles
+    <input type="checkbox" id="interjeccions" checked/> interjeccions<br/>
+  <label></label>
+  <select id="search_in_categories">
+      <option value="category_or" selected>té alguna de les categories seleccionades</option>
+      <option value="category_and">té totes les categories seleccionades</option><br/> 
+    </select> <input type="button" value="Marca-les totes" onclick="checkAllCategories();"/> 
+      <input type="button" value="Desmarca-les totes" onclick="uncheckAllCategories();"/><br/>
+
+<label>Marques gramaticals:</label> 
+    
+    <input type="checkbox" id="masculi"/> masculí
+    <input type="checkbox" id="femeni"/> femení 
+    <input type="checkbox" id="singular"/> singular
+    <input type="checkbox" id="plural"/> plural<br/>
+    <label></label>
+    <input type="checkbox" id="infinitiu"/> infinitiu
+    <input type="checkbox" id="gerundi"/> gerundi
+    <input type="checkbox" id="participi"/> participi<br/>
+    <label></label>
+    <input type="checkbox" id="indicatiu"/> indicatiu
+    <input type="checkbox" id="subjuntiu"/> subjuntiu 
+    <input type="checkbox" id="imperatiu"/> imperatiu<br/>
+    <label></label>
+    <input type="checkbox" id="present"/> present
+    <input type="checkbox" id="passat"/> passat
+    <input type="checkbox" id="imperfet"/> imperfet
+    <input type="checkbox" id="futur"/> futur
+    <input type="checkbox" id="condicional"/> condicional<br/>
+    <label></label>
+    <input type="checkbox" id="1p"/> 1a persona
+    <input type="checkbox" id="2p"/> 2a persona
+    <input type="checkbox" id="3p"/> 3a persona<br/>
+        
+  <label></label>
+  <select id="search_in_tags">
+      <option value="tags_or">té alguna de les marques seleccionades</option>
+      <option value="tags_and" selected>té totes les marques seleccionades</option><br/> 
+    </select> <input type="button" value="Desmarca-les totes" onclick="uncheckAllTags();" /><br/>
+
+  
+  <br><br>
+
+  <input type="submit" value="Cerca">
+  <input type="button" value="Neteja" onclick="cleanAll();">
+</form> 
+
+<script>
+
+String.prototype.isEmpty = function() {
+    return (this.length === 0 || !this.trim());
+};
+
+Initialize();
+
+
+
+function Initialize(){
+ 
+  createOptionsSelect("nre_motsencreuats",2,41,5)
+  createMotsEncreuats();
+
+  createOptionsSelect("min_char",1,41,1)
+  createOptionsSelect("max_char",1,41,41)
+  createOptionsSelect("min_sil",1,18,1)
+  createOptionsSelect("max_sil",1,18,18)
+  
+}
+
+function createOptionsSelect(id, from, to, defaultOp) {
+  for (i=from;i<to+1;i++) {
+    var x = document.getElementById(id);
+    var option = document.createElement("option");
+    option.text = i;
+    if (i===defaultOp) {
+      option.selected = true;
+    }
+    x.add(option);
+  }
+
+}
+
+function disableElement(el){
+  document.getElementById(el).disabled=true;
+}
+
+function enableElement(el){
+  document.getElementById(el).disabled=false;
+}
+
+function udpateEnabled(){
+  var els = ["cerca_principal", "acaba_amb", "anagrama_de", "comenca_amb", "conte_cadena", "conte_lletres",  "mot_encreuat", "no_conte_cadena", "no_conte_lletres",  "rima_amb"];
+  els.forEach(disableElement);
+  if (!document.getElementById("rima_amb").value.isEmpty()) {
+    enableElement("rima_amb");
+  } else if (!document.getElementById("cerca_principal").value.isEmpty()) {
+    enableElement("cerca_principal");
+  } else if (!document.getElementById("anagrama_de").value.isEmpty()) {
+    enableElement("anagrama_de");
+  } else {
+    els.forEach(enableElement);
+  }
+  //TODO...  
+  
+
+}
+
+function createMotsEncreuats(){
+  var e = document.getElementById("nre_motsencreuats");
+  var num = e.options[e.selectedIndex].value;
+  var el = document.getElementById("mot_encreuat");
+  el.innerHTML = "";
+  for (i=0;i<num;i++) {
+    var x = document.createElement("INPUT");
+    x.setAttribute("id", "mot_encreuat" + i);
+    x.setAttribute("type", "text");
+    x.setAttribute("class", "smallbox");
+    x.setAttribute("maxlength", "1");
+    x.setAttribute("oninput", "updateMotsEncreuats()");
+    x.value = "";
+    el.appendChild(x);
+  }
+
+}
+
+function updateMotsEncreuats() {
+  var e = document.getElementById("nre_motsencreuats");
+  var num = e.options[e.selectedIndex].value;
+  for (i=0;i<num;i++) {
+    var el = document.getElementById("mot_encreuat"+i);
+    s = el.value;
+    s = s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+    s = s.replace(/[^A-Z]/g, "");
+    el.value = s;
+  }
+  udpateEnabled();
+}
+
+function updateAnagrama() {
+  var e = document.getElementById("anagrama_de");
+  s = e.value;
+  e.value = s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+  udpateEnabled();
+}
+
+function cleanAll() {
+  var inputTextEl = ["acaba_amb", "anagrama_de", "cerca_principal", "comenca_amb", "conte_cadena", "conte_lletres",  "mot_encreuat", "no_conte_cadena", "no_conte_lletres",  "rima_amb"];
+  inputTextEl.forEach( function(el) {
+    document.getElementById(el).value = "";
+  });
+  //"diacritics", "maj_min", "max_char", "max_sil", "nre_motsencreuats", "reg_exp",
+  createMotsEncreuats();
+  checkAllCategories();
+  uncheckAllTags();
+}
+
+function checkAllCategories() {
+  var cats = ["noms_comuns", "noms_propis", "adjectius", "verbs", "adverbis", "preposicions", "conjuncions", "articles", "interjeccions", "interjeccions", "pronoms"];
+  cats.forEach(function(el){
+    document.getElementById(el).checked=true;
+  });
+}
+
+function uncheckAllCategories() {
+  var cats = ["noms_comuns", "noms_propis", "adjectius", "verbs", "adverbis", "preposicions", "conjuncions", "articles", "interjeccions", "interjeccions", "pronoms"];
+  cats.forEach(function(el){
+    document.getElementById(el).checked=false;
+  });
+}
+
+function uncheckAllTags() {
+  var tags = ["masculi", "femeni", "singular", "plural", "infinitiu", "gerundi", "participi", "indicatiu", "subjuntiu", "imperatiu", "present", "passat", "imperfet", "futur", "condicional", "1p", "2p", "3p", "3a"];
+  tags.forEach(function(el){
+    document.getElementById(el).checked=false;
+  }); 
+}
+
+</script>
+
+
+
+</body>
+</html>
